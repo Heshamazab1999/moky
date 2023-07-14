@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1072986736418:android:bd165cc260011d6894077b",
+        "mobilesdk_app_id": "1:1072986736418:android:48d54c1a576bb6b194077b",
         "android_client_info": {
-          "package_name": "com.moky_mah_userapp"
+          "package_name": "com.moky_mah_user"
         }
       },
       "oauth_client": [
@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "1072986736418-riuerp51idhjtmpj7fnmjibii4sgi5f9.apps.googleusercontent.com",
+              "client_id": "1072986736418-8c8e8tft06t4trdd1vfq2e071bbca50k.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.mokymah.app"
+                "bundle_id": "com.mokymah.userapp"
               }
             }
           ]
