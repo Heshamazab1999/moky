@@ -39,14 +39,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   File file;
   final picker = ImagePicker();
-  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   void _choose() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 50, maxHeight: 500, maxWidth: 500);
+    final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: 500,
+        maxWidth: 500);
     setState(() {
       if (pickedFile != null) {
         file = File(pickedFile.path);
@@ -64,68 +70,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String _password = _passwordController.text.trim();
     String _confirmPassword = _confirmPasswordController.text.trim();
 
-    if(Provider.of<ProfileProvider>(context, listen: false).userInfoModel.fName == _firstNameController.text
-        && Provider.of<ProfileProvider>(context, listen: false).userInfoModel.lName == _lastNameController.text
-        && Provider.of<ProfileProvider>(context, listen: false).userInfoModel.phone == _phoneController.text && file == null
-        && _passwordController.text.isEmpty && _confirmPasswordController.text.isEmpty) {
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Change something to update'),
+    if (Provider.of<ProfileProvider>(context, listen: false)
+                .userInfoModel
+                .fName ==
+            _firstNameController.text &&
+        Provider.of<ProfileProvider>(context, listen: false)
+                .userInfoModel
+                .lName ==
+            _lastNameController.text &&
+        Provider.of<ProfileProvider>(context, listen: false)
+                .userInfoModel
+                .phone ==
+            _phoneController.text &&
+        file == null &&
+        _passwordController.text.isEmpty &&
+        _confirmPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Change something to update'),
           backgroundColor: ColorResources.RED));
-    }
-
-    else if (_firstName.isEmpty || _lastName.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getTranslated('NAME_FIELD_MUST_BE_REQUIRED', context)),
+    } else if (_firstName.isEmpty || _lastName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(getTranslated('NAME_FIELD_MUST_BE_REQUIRED', context)),
           backgroundColor: ColorResources.RED));
-    }
-
-    else if (_email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getTranslated('EMAIL_MUST_BE_REQUIRED', context)),
+    } else if (_email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(getTranslated('EMAIL_MUST_BE_REQUIRED', context)),
           backgroundColor: ColorResources.RED));
-    }
-
-    else if (_phoneNumber.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getTranslated('PHONE_MUST_BE_REQUIRED', context)),
+    } else if (_phoneNumber.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(getTranslated('PHONE_MUST_BE_REQUIRED', context)),
           backgroundColor: ColorResources.RED));
-    }
-
-    else if((_password.isNotEmpty && _password.length < 6)
-        || (_confirmPassword.isNotEmpty && _confirmPassword.length < 6)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Password should be at least 6 character'),
+    } else if ((_password.isNotEmpty && _password.length < 6) ||
+        (_confirmPassword.isNotEmpty && _confirmPassword.length < 6)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Password should be at least 6 character'),
           backgroundColor: ColorResources.RED));
-    }
-
-    else if(_password != _confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(getTranslated('PASSWORD_DID_NOT_MATCH', context)),
+    } else if (_password != _confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(getTranslated('PASSWORD_DID_NOT_MATCH', context)),
           backgroundColor: ColorResources.RED));
-    }
-
-    else {
-      UserInfoModel updateUserInfoModel = Provider.of<ProfileProvider>(context, listen: false).userInfoModel;
+    } else {
+      UserInfoModel updateUserInfoModel =
+          Provider.of<ProfileProvider>(context, listen: false).userInfoModel;
       updateUserInfoModel.method = 'put';
       updateUserInfoModel.fName = _firstNameController.text ?? "";
       updateUserInfoModel.lName = _lastNameController.text ?? "";
       updateUserInfoModel.phone = _phoneController.text ?? '';
       String pass = _passwordController.text ?? '';
 
-      await Provider.of<ProfileProvider>(context, listen: false).updateUserInfo(
-        updateUserInfoModel, pass, file, Provider.of<AuthProvider>(context, listen: false).getUserToken(),
-      ).then((response) {
-        if(response.isSuccess) {
-          Provider.of<ProfileProvider>(context, listen: false).getUserInfo(context);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Updated Successfully'),
+      await Provider.of<ProfileProvider>(context, listen: false)
+          .updateUserInfo(
+        updateUserInfoModel,
+        pass,
+        file,
+        Provider.of<AuthProvider>(context, listen: false).getUserToken(),
+      )
+          .then((response) {
+        if (response.isSuccess) {
+          Provider.of<ProfileProvider>(context, listen: false)
+              .getUserInfo(context);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Updated Successfully'),
               backgroundColor: Colors.green));
           _passwordController.clear();
           _confirmPasswordController.clear();
           setState(() {});
-        }else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.message),
-              backgroundColor: Colors.red));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(response.message), backgroundColor: Colors.red));
         }
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -138,246 +154,394 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _emailController.text = profile.userInfoModel.email;
           _phoneController.text = profile.userInfoModel.phone;
 
-
           print('wallet amount===>${profile.userInfoModel.walletBalance}');
 
-          return Stack(clipBehavior: Clip.none,
+          return Stack(
+            clipBehavior: Clip.none,
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 100),
-                child: Image.asset(Images.toolbar_background, fit: BoxFit.fill, height: 500,
-                  color: Provider.of<ThemeProvider>(context).darkTheme ? Colors.black : null,),
+                child: Image.asset(
+                  Images.toolbar_background,
+                  fit: BoxFit.cover,
+                  height: 500,
+                  color:  Theme.of(context).primaryColor,
+                ),
               ),
-
-              Container(padding: EdgeInsets.only(top: 35, left: 15),
+              Container(
+                padding: EdgeInsets.only(top: 35, left: 15),
                 child: Row(children: [
                   CupertinoNavigationBarBackButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    color: Colors.white,),
+                    color: Colors.white,
+                  ),
                   SizedBox(width: 10),
-
                   Text(getTranslated('PROFILE', context),
-                      style: titilliumRegular.copyWith(fontSize: 20, color: Colors.white),
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                      style: titilliumRegular.copyWith(
+                          fontSize: 20, color: Colors.white),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis),
                 ]),
               ),
-
-              Container(padding: EdgeInsets.only(top: 55),
-                child: Column(children: [
-                  Column(
-                    children: [
-                      Container(margin: EdgeInsets.only(top: Dimensions.MARGIN_SIZE_EXTRA_LARGE),
-                        alignment: Alignment.center,
+              Container(
+                padding: EdgeInsets.only(top: 55),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: Dimensions.MARGIN_SIZE_EXTRA_LARGE),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Colors.white, width: 3),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: file == null
+                                    ? FadeInImage.assetNetwork(
+                                        placeholder: Images.placeholder,
+                                        width: Dimensions.profileImageSize,
+                                        height: Dimensions.profileImageSize,
+                                        fit: BoxFit.cover,
+                                        image:
+                                            '${Provider.of<SplashProvider>(context, listen: false).baseUrls.customerImageUrl}/${profile.userInfoModel.image}',
+                                        imageErrorBuilder: (c, o, s) =>
+                                            Image.asset(Images.placeholder,
+                                                width:
+                                                    Dimensions.profileImageSize,
+                                                height:
+                                                    Dimensions.profileImageSize,
+                                                fit: BoxFit.cover),
+                                      )
+                                    : Image.file(file,
+                                        width: Dimensions.profileImageSize,
+                                        height: Dimensions.profileImageSize,
+                                        fit: BoxFit.fill),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: -10,
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      ColorResources.LIGHT_SKY_BLUE,
+                                  radius: 14,
+                                  child: IconButton(
+                                    onPressed: _choose,
+                                    padding: EdgeInsets.all(0),
+                                    icon: Icon(Icons.edit,
+                                        color: ColorResources.WHITE, size: 18),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          '${profile.userInfoModel.fName} ${profile.userInfoModel.lName ?? ''}',
+                          style: titilliumSemiBold.copyWith(
+                              color: ColorResources.WHITE, fontSize: 20.0),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: Dimensions.MARGIN_SIZE_DEFAULT),
+                    Expanded(
+                      child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          border: Border.all(color: Colors.white, width: 3),
-                          shape: BoxShape.circle,),
-                        child: Stack(clipBehavior: Clip.none,
+                            color: ColorResources.getIconBg(context),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(
+                                  Dimensions.MARGIN_SIZE_DEFAULT),
+                              topRight: Radius.circular(
+                                  Dimensions.MARGIN_SIZE_DEFAULT),
+                            )),
+                        child: ListView(
+                          physics: BouncingScrollPhysics(),
                           children: [
-                            ClipRRect(borderRadius: BorderRadius.circular(50),
-                              child: file == null ?
-                              FadeInImage.assetNetwork(
-                                placeholder: Images.placeholder, width: Dimensions.profileImageSize,
-                                height: Dimensions.profileImageSize, fit: BoxFit.cover,
-                                image: '${Provider.of<SplashProvider>(context, listen: false).baseUrls.customerImageUrl}/${profile.userInfoModel.image}',
-                                imageErrorBuilder: (c, o, s) => Image.asset(Images.placeholder,
-                                    width: Dimensions.profileImageSize, height: Dimensions.profileImageSize, fit: BoxFit.cover),
-                              ) :
-                              Image.file(file, width: Dimensions.profileImageSize,
-                                  height: Dimensions.profileImageSize, fit: BoxFit.fill),),
-                            Positioned(bottom: 0, right: -10,
-                              child: CircleAvatar(backgroundColor: ColorResources.LIGHT_SKY_BLUE,
-                                radius: 14,
-                                child: IconButton(onPressed: _choose,
-                                  padding: EdgeInsets.all(0),
-                                  icon: Icon(Icons.edit, color: ColorResources.WHITE, size: 18),),),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  right: Dimensions.MARGIN_SIZE_DEFAULT),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.person,
+                                              color: Provider.of<ThemeProvider>(
+                                                          context)
+                                                      .darkTheme
+                                                  ? Theme.of(context).cardColor
+                                                  : Theme.of(context)
+                                                      .primaryColor,
+                                              size: 20),
+                                          SizedBox(
+                                              width: Dimensions
+                                                  .MARGIN_SIZE_EXTRA_SMALL),
+                                          Text(
+                                              getTranslated(
+                                                  'FIRST_NAME', context),
+                                              style: titilliumRegular)
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height: Dimensions.MARGIN_SIZE_SMALL),
+                                      CustomTextField(
+                                        textInputType: TextInputType.name,
+                                        focusNode: _fNameFocus,
+                                        nextNode: _lNameFocus,
+                                        hintText:
+                                            profile.userInfoModel.fName ?? '',
+                                        controller: _firstNameController,
+                                      ),
+                                    ],
+                                  )),
+                                  SizedBox(
+                                      width: Dimensions.PADDING_SIZE_DEFAULT),
+                                  Expanded(
+                                      child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons.person,
+                                              color: Provider.of<ThemeProvider>(
+                                                          context)
+                                                      .darkTheme
+                                                  ? Theme.of(context).cardColor
+                                                  : Theme.of(context)
+                                                      .primaryColor,
+                                              size: 20),
+                                          SizedBox(
+                                              width: Dimensions
+                                                  .MARGIN_SIZE_EXTRA_SMALL),
+                                          Text(
+                                              getTranslated(
+                                                  'LAST_NAME', context),
+                                              style: titilliumRegular)
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height: Dimensions.MARGIN_SIZE_SMALL),
+                                      CustomTextField(
+                                        textInputType: TextInputType.name,
+                                        focusNode: _lNameFocus,
+                                        nextNode: _emailFocus,
+                                        hintText: profile.userInfoModel.lName,
+                                        controller: _lastNameController,
+                                      ),
+                                    ],
+                                  )),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  left: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  right: Dimensions.MARGIN_SIZE_DEFAULT),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.alternate_email,
+                                          color: Provider.of<ThemeProvider>(
+                                                      context)
+                                                  .darkTheme
+                                              ? Theme.of(context).cardColor
+                                              : Theme.of(context).primaryColor,
+                                          size: 20),
+                                      SizedBox(
+                                        width:
+                                            Dimensions.MARGIN_SIZE_EXTRA_SMALL,
+                                      ),
+                                      Text(getTranslated('EMAIL', context),
+                                          style: titilliumRegular)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height: Dimensions.MARGIN_SIZE_SMALL),
+                                  CustomTextField(
+                                    textInputType: TextInputType.emailAddress,
+                                    focusNode: _emailFocus,
+                                    nextNode: _phoneFocus,
+                                    hintText: profile.userInfoModel.email ?? '',
+                                    controller: _emailController,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  left: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  right: Dimensions.MARGIN_SIZE_DEFAULT),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.dialpad,
+                                          color: Provider.of<ThemeProvider>(
+                                                      context)
+                                                  .darkTheme
+                                              ? Theme.of(context).cardColor
+                                              : Theme.of(context).primaryColor,
+                                          size: 20),
+                                      SizedBox(
+                                          width: Dimensions
+                                              .MARGIN_SIZE_EXTRA_SMALL),
+                                      Text(getTranslated('PHONE_NO', context),
+                                          style: titilliumRegular)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height: Dimensions.MARGIN_SIZE_SMALL),
+                                  CustomTextField(
+                                    textInputType: TextInputType.number,
+                                    focusNode: _phoneFocus,
+                                    hintText: profile.userInfoModel.phone ?? "",
+                                    nextNode: _addressFocus,
+                                    controller: _phoneController,
+                                    isPhoneNumber: true,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  left: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  right: Dimensions.MARGIN_SIZE_DEFAULT),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.lock_open,
+                                          color: Provider.of<ThemeProvider>(
+                                                      context)
+                                                  .darkTheme
+                                              ? Theme.of(context).cardColor
+                                              : Theme.of(context).primaryColor,
+                                          size: 20),
+                                      SizedBox(
+                                          width: Dimensions
+                                              .MARGIN_SIZE_EXTRA_SMALL),
+                                      Text(getTranslated('PASSWORD', context),
+                                          style: titilliumRegular)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height: Dimensions.MARGIN_SIZE_SMALL),
+                                  CustomPasswordTextField(
+                                    controller: _passwordController,
+                                    focusNode: _passwordFocus,
+                                    nextNode: _confirmPasswordFocus,
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  left: Dimensions.MARGIN_SIZE_DEFAULT,
+                                  right: Dimensions.MARGIN_SIZE_DEFAULT),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.lock_open,
+                                          color: Provider.of<ThemeProvider>(
+                                                      context)
+                                                  .darkTheme
+                                              ? Theme.of(context).cardColor
+                                              : Theme.of(context).primaryColor,
+                                          size: 20),
+                                      SizedBox(
+                                          width: Dimensions
+                                              .MARGIN_SIZE_EXTRA_SMALL),
+                                      Text(
+                                          getTranslated(
+                                              'RE_ENTER_PASSWORD', context),
+                                          style: titilliumRegular)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height: Dimensions.MARGIN_SIZE_SMALL),
+                                  CustomPasswordTextField(
+
+                                    controller: _confirmPasswordController,
+                                    focusNode: _confirmPasswordFocus,
+                                    textInputAction: TextInputAction.done,
+                                  ),
+                                  SizedBox(
+                                      height: Dimensions.PADDING_SIZE_LARGE),
+                                  InkWell(
+                                    onTap: () => showAnimatedDialog(
+                                        context,
+                                        SignOutConfirmationDialog(
+                                          isDelete: true,
+                                          customerId: profile.userInfoModel.id,
+                                        ),
+                                        isFlip: true),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            alignment: Alignment.center,
+                                            height: Dimensions.ICON_SIZE_SMALL,
+                                            child: Image.asset(Images.delete)),
+                                        SizedBox(
+                                          width:
+                                              Dimensions.PADDING_SIZE_DEFAULT,
+                                        ),
+                                        Text(
+                                          getTranslated(
+                                              'delete_account', context),
+                                          style: robotoRegular.copyWith(),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-
-                      Text('${profile.userInfoModel.fName} ${profile.userInfoModel.lName ?? ''}',
-                        style: titilliumSemiBold.copyWith(color: ColorResources.WHITE, fontSize: 20.0),)
-                    ],
-                  ),
-
-                  SizedBox(height: Dimensions.MARGIN_SIZE_DEFAULT),
-
-
-                  Expanded(child: Container(
-                    decoration: BoxDecoration(
-                        color: ColorResources.getIconBg(context),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(Dimensions.MARGIN_SIZE_DEFAULT),
-                          topRight: Radius.circular(Dimensions.MARGIN_SIZE_DEFAULT),)),
-                    child: ListView(physics: BouncingScrollPhysics(),
-                      children: [
-                        Container(margin: EdgeInsets.only(left: Dimensions.MARGIN_SIZE_DEFAULT,
-                            right: Dimensions.MARGIN_SIZE_DEFAULT),
-                          child: Row(children: [
-                            Expanded(child: Column(
-                              children: [Row(children: [
-                                Icon(Icons.person, color: ColorResources.getLightSkyBlue(context), size: 20),
-                                SizedBox(width: Dimensions.MARGIN_SIZE_EXTRA_SMALL),
-                                Text(getTranslated('FIRST_NAME', context), style: titilliumRegular)
-                              ],
-                              ),
-                                SizedBox(height: Dimensions.MARGIN_SIZE_SMALL),
-
-                                CustomTextField(textInputType: TextInputType.name,
-                                  focusNode: _fNameFocus,
-                                  nextNode: _lNameFocus,
-                                  hintText: profile.userInfoModel.fName ?? '',
-                                  controller: _firstNameController,
-                                ),
-                              ],
-                            )),
-                            SizedBox(width: Dimensions.PADDING_SIZE_DEFAULT),
-
-                            Expanded(child: Column(
-                              children: [
-                                Row(children: [
-                                  Icon(Icons.person, color: ColorResources.getLightSkyBlue(context), size: 20),
-                                  SizedBox(width: Dimensions.MARGIN_SIZE_EXTRA_SMALL),
-                                  Text(getTranslated('LAST_NAME', context), style: titilliumRegular)
-                                ],),
-                                SizedBox(height: Dimensions.MARGIN_SIZE_SMALL),
-
-                                CustomTextField(
-                                  textInputType: TextInputType.name,
-                                  focusNode: _lNameFocus,
-                                  nextNode: _emailFocus,
-                                  hintText: profile.userInfoModel.lName,
-                                  controller: _lastNameController,
-                                ),
-                              ],
-                            )),
-                          ],
-                          ),
-                        ),
-
-
-
-                        Container(margin: EdgeInsets.only(
-                            top: Dimensions.MARGIN_SIZE_DEFAULT,
-                            left: Dimensions.MARGIN_SIZE_DEFAULT,
-                            right: Dimensions.MARGIN_SIZE_DEFAULT),
-                          child: Column(children: [
-                            Row(children: [Icon(Icons.alternate_email,
-                                color: ColorResources.getLightSkyBlue(context), size: 20),
-                                SizedBox(width: Dimensions.MARGIN_SIZE_EXTRA_SMALL,),
-                                Text(getTranslated('EMAIL', context), style: titilliumRegular)
-                              ],
-                            ),
-                            SizedBox(height: Dimensions.MARGIN_SIZE_SMALL),
-
-                            CustomTextField(textInputType: TextInputType.emailAddress,
-                              focusNode: _emailFocus,
-                              nextNode: _phoneFocus,
-                              hintText: profile.userInfoModel.email ?? '',
-                              controller: _emailController,
-                            ),
-                          ],
-                          ),
-                        ),
-
-
-                        Container(margin: EdgeInsets.only(
-                            top: Dimensions.MARGIN_SIZE_DEFAULT,
-                            left: Dimensions.MARGIN_SIZE_DEFAULT,
-                            right: Dimensions.MARGIN_SIZE_DEFAULT),
-                          child: Column(children: [
-                            Row(children: [
-                              Icon(Icons.dialpad, color: ColorResources.getLightSkyBlue(context), size: 20),
-                              SizedBox(width: Dimensions.MARGIN_SIZE_EXTRA_SMALL),
-                              Text(getTranslated('PHONE_NO', context), style: titilliumRegular)
-                            ],),
-                            SizedBox(height: Dimensions.MARGIN_SIZE_SMALL),
-
-                            CustomTextField(textInputType: TextInputType.number,
-                              focusNode: _phoneFocus,
-                              hintText: profile.userInfoModel.phone ?? "",
-                              nextNode: _addressFocus,
-                              controller: _phoneController,
-                              isPhoneNumber: true,
-                            ),],
-                          ),
-                        ),
-
-
-                        Container(margin: EdgeInsets.only(
-                            top: Dimensions.MARGIN_SIZE_DEFAULT,
-                            left: Dimensions.MARGIN_SIZE_DEFAULT,
-                            right: Dimensions.MARGIN_SIZE_DEFAULT),
-                          child: Column(children: [
-                            Row(children: [
-                              Icon(Icons.lock_open, color: ColorResources.getPrimary(context), size: 20),
-                              SizedBox(width: Dimensions.MARGIN_SIZE_EXTRA_SMALL),
-                              Text(getTranslated('PASSWORD', context), style: titilliumRegular)
-                            ],),
-                            SizedBox(height: Dimensions.MARGIN_SIZE_SMALL),
-
-                            CustomPasswordTextField(controller: _passwordController,
-                              focusNode: _passwordFocus,
-                              nextNode: _confirmPasswordFocus,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          ],),
-                        ),
-
-
-                        Container(margin: EdgeInsets.only(
-                            top: Dimensions.MARGIN_SIZE_DEFAULT,
-                            left: Dimensions.MARGIN_SIZE_DEFAULT,
-                            right: Dimensions.MARGIN_SIZE_DEFAULT),
-                          child: Column(children: [
-                            Row(
-                              children: [
-                                Icon(Icons.lock_open, color: ColorResources.getPrimary(context), size: 20),
-                                SizedBox(width: Dimensions.MARGIN_SIZE_EXTRA_SMALL),
-                                Text(getTranslated('RE_ENTER_PASSWORD', context), style: titilliumRegular)
-                              ],),
-                            SizedBox(height: Dimensions.MARGIN_SIZE_SMALL),
-
-
-                            CustomPasswordTextField(controller: _confirmPasswordController,
-                              focusNode: _confirmPasswordFocus,
-                              textInputAction: TextInputAction.done,
-                            ),
-
-
-                            SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-
-                            InkWell(
-                              onTap: () => showAnimatedDialog(context, SignOutConfirmationDialog(isDelete: true,customerId: profile.userInfoModel.id,), isFlip: true),
-                              child: Row(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,children: [
-                                Container(alignment: Alignment.center,height: Dimensions.ICON_SIZE_SMALL,child: Image.asset(Images.delete)),
-                                SizedBox(width: Dimensions.PADDING_SIZE_DEFAULT,),
-                                Text(getTranslated('delete_account', context),style: robotoRegular.copyWith(),),
-                              ],),
-                            )
-
-
-                          ],),
-                        ),
-                      ],
                     ),
-                  ),
-                  ),
-                  Container(margin: EdgeInsets.symmetric(horizontal: Dimensions.MARGIN_SIZE_LARGE,
-                      vertical: Dimensions.MARGIN_SIZE_SMALL),
-                    child: !Provider.of<ProfileProvider>(context).isLoading ?
-                    CustomButton(onTap: _updateUserAccount, buttonText: getTranslated('UPDATE_ACCOUNT', context)) :
-                    Center(child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))),
-                  ),
-                ],
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: Dimensions.MARGIN_SIZE_LARGE,
+                          vertical: Dimensions.MARGIN_SIZE_SMALL),
+                      child: !Provider.of<ProfileProvider>(context).isLoading
+                          ? CustomButton(
+                              onTap: _updateUserAccount,
+                              buttonText:
+                                  getTranslated('UPDATE_ACCOUNT', context))
+                          : Center(
+                              child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                              Provider.of<ThemeProvider>(context).darkTheme
+                                  ? Theme.of(context).cardColor
+                                  : Theme.of(context).primaryColor,
+                            ))),
+                    ),
+                  ],
                 ),
               ),
             ],
           );
-          },
+        },
       ),
     );
   }

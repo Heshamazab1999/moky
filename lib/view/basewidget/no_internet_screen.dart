@@ -22,7 +22,7 @@ class NoInternetOrDataScreen extends StatelessWidget {
             Image.asset(isNoInternet ? Images.no_internet : Images.no_data, width: 150, height: 150),
             Text(isNoInternet ? getTranslated('OPPS', context) : getTranslated('sorry', context), style: titilliumBold.copyWith(
               fontSize: 30,
-              color: isNoInternet ? Theme.of(context).textTheme.bodyLarge.color : ColorResources.getColombiaBlue(context),
+              color: isNoInternet ? Theme.of(context).textTheme.bodyLarge.color : ColorResources.getPrimary(context),
             )),
             SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(

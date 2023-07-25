@@ -1,7 +1,7 @@
 import 'package:flutter_sixvalley_ecommerce/data/model/response/language_model.dart';
 
 class AppConstants {
-  static const String APP_NAME = 'MokyMah';
+  static const String APP_NAME = 'Moky Mah';
   static const String APP_VERSION = '13.1';
   static const String BASE_URL = 'https://mokymah.com';
   static const String USER_ID = 'userId';

@@ -65,8 +65,6 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             builder: (ctx, details, child) {
               int selectedIndex = 0;
 
-
-
               Variation _variation;
               String _variantName = (widget.product.colors != null && widget.product.colors.length != 0) ? widget.product.colors[details.variantIndex].name : null;
               List<String> _variationList = [];

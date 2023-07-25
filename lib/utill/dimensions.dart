@@ -42,5 +42,5 @@ class Dimensions {
   static const double chooseReviewImageSize = 40.0;
   static const double profileImageSize = 100.0;
   static const double LOGO_HEIGHT = 80.0;
-  static const double CARD_HEIGHT = 260.0;
+  static const double CARD_HEIGHT = 280.0;
 }

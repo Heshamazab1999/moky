@@ -31,7 +31,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="MokyMah"
+        android:label="Moky Mah"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">

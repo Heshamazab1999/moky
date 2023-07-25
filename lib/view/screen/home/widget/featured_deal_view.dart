@@ -38,7 +38,7 @@ class FeaturedDealsView extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.all(5),
                 width: isHomePage ? 300 : null,
-                height: 105,
+                height: 110,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).highlightColor,
