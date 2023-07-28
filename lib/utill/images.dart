@@ -86,7 +86,7 @@ class Images {
   static const String stripe = 'assets/images/stripe.png';
   static const String flutterwave = 'assets/images/flutterwave.png';
   static const String fawryPay = 'assets/images/fawry_pay.png';
-  static const String cod = 'assets/images/cod.png';
+  static const String cod = 'assets/images/cod.jpg';
   static const String offline_pay = 'assets/images/offline_pay.png';
   static const String wallet_pay = 'assets/images/wallet_pay.png';
 }

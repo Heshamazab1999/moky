@@ -48,6 +48,8 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  int selectedIndex = 0;
+
   _loadData(BuildContext context) async {
     Provider.of<ProductDetailsProvider>(context, listen: false)
         .getProductDetails(context, widget.slug.toString());
@@ -67,6 +69,32 @@ class _ProductDetailsState extends State<ProductDetails> {
       Provider.of<WishListProvider>(context, listen: false)
           .checkWishList(widget.productId.toString(), context);
     }
+
+    if (Provider.of<ProductDetailsProvider>(context, listen: false)
+            .variantIndex >=
+        Provider.of<ProductDetailsProvider>(context, listen: false)
+            .productDetailsModel
+            .images
+            .length) {
+      selectedIndex =
+          Provider.of<ProductDetailsProvider>(context, listen: false)
+                  .variantIndex -
+              (Provider.of<ProductDetailsProvider>(context, listen: false)
+                      .productDetailsModel
+                      .colors
+                      .length -
+                  Provider.of<ProductDetailsProvider>(context, listen: false)
+                      .productDetailsModel
+                      .images
+                      .length);
+    } else {
+      selectedIndex =
+          Provider.of<ProductDetailsProvider>(context, listen: false)
+              .variantIndex;
+    }
+
+    print(
+        'bangla===>$selectedIndex/${Provider.of<ProductDetailsProvider>(context, listen: false).productDetailsModel.images.length}');
     // Provider.of<ProductProvider>(context, listen: false).initSellerProductList(Provider.of<ProductDetailsProvider>(context, listen: false).productDetailsModel.userId.toString(), 1, context);
   }
 
@@ -83,6 +111,12 @@ class _ProductDetailsState extends State<ProductDetails> {
       ));
     }
     return indicators;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -133,334 +167,343 @@ class _ProductDetailsState extends State<ProductDetails> {
           },
           child: Consumer<ProductDetailsProvider>(
             builder: (context, details, child) {
-              int selectedIndex = 0;
-              if (details.variantIndex >=
-                  details.productDetailsModel.images.length) {
-                selectedIndex = details.variantIndex -
-                    (details.productDetailsModel.colors.length -
-                        details.productDetailsModel.images.length);
-              } else {
-                selectedIndex = details.variantIndex;
-              }
-
-              print(
-                  'bangla===>$selectedIndex/${details.productDetailsModel.images.length}');
               return SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: !details.isDetails
                     ? Column(
                         children: [
-                          // ProductImageView(productModel: details.productDetailsModel),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              InkWell(
-                                onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ProductImageScreen(
-                                                title: getTranslated(
-                                                    'product_image', context),
-                                                imageList: details
-                                                    .productDetailsModel
-                                                    .images))),
-                                child: details.productDetailsModel.images !=
-                                        null
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(20),
-                                              bottomRight: Radius.circular(20)),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey[
+                          details.productDetailsModel.imageColors.isEmpty
+                              ? ProductImageView(
+                                  productModel: details.productDetailsModel)
+                              : Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    InkWell(
+                                      onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  ProductImageScreen(
+                                                      title: getTranslated(
+                                                          'product_image',
+                                                          context),
+                                                      imageList: details
+                                                          .productDetailsModel
+                                                          .images))),
+                                      child: details
+                                                  .productDetailsModel.images !=
+                                              null
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(20),
+                                                    bottomRight:
+                                                        Radius.circular(20)),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey[
+                                                          Provider.of<ThemeProvider>(
+                                                                      context)
+                                                                  .darkTheme
+                                                              ? 700
+                                                              : 300],
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5)
+                                                ],
+                                                gradient:
                                                     Provider.of<ThemeProvider>(
                                                                 context)
                                                             .darkTheme
-                                                        ? 700
-                                                        : 300],
-                                                spreadRadius: 1,
-                                                blurRadius: 5)
-                                          ],
-                                          gradient: Provider.of<ThemeProvider>(
-                                                      context)
-                                                  .darkTheme
-                                              ? null
-                                              : LinearGradient(
-                                                  colors: [
-                                                    ColorResources.WHITE,
-                                                    ColorResources.IMAGE_BG
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                ),
-                                        ),
-                                        child: Stack(children: [
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            width: double.infinity,
-                                            child: details.productDetailsModel
-                                                        .images !=
-                                                    null
-                                                ? FadeInImage.assetNetwork(
-                                              fit: BoxFit.cover,
-                                                    placeholder:
-                                                        Images.placeholder,
-                                                    image: (details.productDetailsModel
-                                                                    .colors !=
-                                                                null &&
-                                                            details
-                                                                    .productDetailsModel
-                                                                    .colors
-                                                                    .length >
-                                                                0)
-                                                        ? '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productImageUrl}/${details.productDetailsModel.images[selectedIndex]}??'
-                                                        : '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productThumbnailUrl}/${details.productDetailsModel.thumbnail}',
-                                                    imageErrorBuilder: (c, o,
-                                                            s) =>
-                                                        Image.asset(
-                                                            Images.placeholder),
-                                                  )
-                                                // InkWell(
-                                                //         child: FadeInImage
-                                                //             .assetNetwork(
-                                                //           fit: BoxFit.cover,
-                                                //           placeholder:
-                                                //               Images.placeholder,
-                                                //           height:
-                                                //               MediaQuery.of(context)
-                                                //                   .size
-                                                //                   .width,
-                                                //           width:
-                                                //               MediaQuery.of(context)
-                                                //                   .size
-                                                //                   .width,
-                                                //           image:
-                                                //               '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productImageUrl}/${details.productDetailsModel.images[selectedIndex]}',
-                                                //           imageErrorBuilder:
-                                                //               (c, o, s) =>
-                                                //                   Image.asset(
-                                                //             Images.placeholder,
-                                                //             height: MediaQuery.of(
-                                                //                     context)
-                                                //                 .size
-                                                //                 .width,
-                                                //             width: MediaQuery.of(
-                                                //                     context)
-                                                //                 .size
-                                                //                 .width,
-                                                //             fit: BoxFit.cover,
-                                                //           ),
-                                                //         ),
-                                                //       )
-                                                // PageView.builder(
-                                                //         // controller: _controller,
-                                                //         itemCount: details
-                                                //             .productDetailsModel
-                                                //             .images
-                                                //             .length,
-                                                //         itemBuilder:
-                                                //             (context, index) {
-                                                //           return InkWell(
-                                                //             child: FadeInImage
-                                                //                 .assetNetwork(
-                                                //               fit: BoxFit.cover,
-                                                //               placeholder: Images
-                                                //                   .placeholder,
-                                                //               height: MediaQuery.of(
-                                                //                       context)
-                                                //                   .size
-                                                //                   .width,
-                                                //               width: MediaQuery.of(
-                                                //                       context)
-                                                //                   .size
-                                                //                   .width,
-                                                //               image:
-                                                //                   '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productImageUrl}/${details.productDetailsModel.images[index]}',
-                                                //               imageErrorBuilder:
-                                                //                   (c, o, s) =>
-                                                //                       Image.asset(
-                                                //                 Images.placeholder,
-                                                //                 height:
-                                                //                     MediaQuery.of(
-                                                //                             context)
-                                                //                         .size
-                                                //                         .width,
-                                                //                 width:
-                                                //                     MediaQuery.of(
-                                                //                             context)
-                                                //                         .size
-                                                //                         .width,
-                                                //                 fit: BoxFit.cover,
-                                                //               ),
-                                                //             ),
-                                                //           );
-                                                //         },
-                                                //         onPageChanged: (index) {
-                                                //           Provider.of<ProductDetailsProvider>(
-                                                //                   context,
-                                                //                   listen: false)
-                                                //               .setImageSliderSelectedIndex(
-                                                //                   index);
-                                                //         },
-                                                //       )
-                                                : SizedBox(),
-                                          ),
-                                          // Positioned(
-                                          //   left: 0,
-                                          //   right: 0,
-                                          //   bottom: 30,
-                                          //   child: Row(
-                                          //     mainAxisAlignment:
-                                          //         MainAxisAlignment.center,
-                                          //     children: [
-                                          //       SizedBox(),
-                                          //       Spacer(),
-                                          //       Row(
-                                          //         mainAxisAlignment:
-                                          //             MainAxisAlignment.center,
-                                          //         children: _indicators(
-                                          //             context,
-                                          //             details
-                                          //                 .productDetailsModel
-                                          //                 .images),
-                                          //       ),
-                                          //       Spacer(),
-                                          //       Provider.of<ProductDetailsProvider>(
-                                          //                       context)
-                                          //                   .imageSliderIndex !=
-                                          //               null
-                                          //           ? Padding(
-                                          //               padding: const EdgeInsets
-                                          //                       .only(
-                                          //                   right: Dimensions
-                                          //                       .PADDING_SIZE_DEFAULT,
-                                          //                   bottom: Dimensions
-                                          //                       .PADDING_SIZE_DEFAULT),
-                                          //               child: Text(
-                                          //                   '${Provider.of<ProductDetailsProvider>(context).imageSliderIndex + 1}' +
-                                          //                       '/' +
-                                          //                       '${details.productDetailsModel.images.length.toString()}'),
-                                          //             )
-                                          //           : SizedBox(),
-                                          //     ],
-                                          //   ),
-                                          // ),
-                                          Positioned(
-                                            top: 16,
-                                            right: 16,
-                                            child: Column(
-                                              children: [
-                                                FavouriteButton(
-                                                  backgroundColor:
-                                                      ColorResources.getImageBg(
-                                                          context),
-                                                  favColor: Colors.redAccent,
-                                                  isSelected: Provider.of<
-                                                              WishListProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .isWish,
-                                                  productId: details
-                                                      .productDetailsModel.id,
-                                                ),
+                                                        ? null
+                                                        : LinearGradient(
+                                                            colors: [
+                                                              ColorResources
+                                                                  .WHITE,
+                                                              ColorResources
+                                                                  .IMAGE_BG
+                                                            ],
+                                                            begin: Alignment
+                                                                .topLeft,
+                                                            end: Alignment
+                                                                .bottomRight,
+                                                          ),
+                                              ),
+                                              child: Stack(children: [
                                                 SizedBox(
-                                                  height: Dimensions
-                                                      .PADDING_SIZE_SMALL,
+                                                  height: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  width: double.infinity,
+                                                  child: details
+                                                              .productDetailsModel
+                                                              .images !=
+                                                          null
+                                                      ? FadeInImage
+                                                          .assetNetwork(
+                                                          fit: BoxFit.cover,
+                                                          placeholder: Images
+                                                              .placeholder,
+                                                          image: (details.productDetailsModel
+                                                                          .colors !=
+                                                                      null &&
+                                                                  details
+                                                                          .productDetailsModel
+                                                                          .colors
+                                                                          .length >
+                                                                      0)
+                                                              ? '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productImageUrl}/${details.productDetailsModel.images[details.variantIndex]}??'
+                                                              : '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productThumbnailUrl}/${details.productDetailsModel.thumbnail}',
+                                                          imageErrorBuilder: (c,
+                                                                  o, s) =>
+                                                              Image.asset(Images
+                                                                  .placeholder),
+                                                        )
+                                                      // InkWell(
+                                                      //         child: FadeInImage
+                                                      //             .assetNetwork(
+                                                      //           fit: BoxFit.cover,
+                                                      //           placeholder:
+                                                      //               Images.placeholder,
+                                                      //           height:
+                                                      //               MediaQuery.of(context)
+                                                      //                   .size
+                                                      //                   .width,
+                                                      //           width:
+                                                      //               MediaQuery.of(context)
+                                                      //                   .size
+                                                      //                   .width,
+                                                      //           image:
+                                                      //               '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productImageUrl}/${details.productDetailsModel.images[selectedIndex]}',
+                                                      //           imageErrorBuilder:
+                                                      //               (c, o, s) =>
+                                                      //                   Image.asset(
+                                                      //             Images.placeholder,
+                                                      //             height: MediaQuery.of(
+                                                      //                     context)
+                                                      //                 .size
+                                                      //                 .width,
+                                                      //             width: MediaQuery.of(
+                                                      //                     context)
+                                                      //                 .size
+                                                      //                 .width,
+                                                      //             fit: BoxFit.cover,
+                                                      //           ),
+                                                      //         ),
+                                                      //       )
+                                                      // PageView.builder(
+                                                      //         // controller: _controller,
+                                                      //         itemCount: details
+                                                      //             .productDetailsModel
+                                                      //             .images
+                                                      //             .length,
+                                                      //         itemBuilder:
+                                                      //             (context, index) {
+                                                      //           return InkWell(
+                                                      //             child: FadeInImage
+                                                      //                 .assetNetwork(
+                                                      //               fit: BoxFit.cover,
+                                                      //               placeholder: Images
+                                                      //                   .placeholder,
+                                                      //               height: MediaQuery.of(
+                                                      //                       context)
+                                                      //                   .size
+                                                      //                   .width,
+                                                      //               width: MediaQuery.of(
+                                                      //                       context)
+                                                      //                   .size
+                                                      //                   .width,
+                                                      //               image:
+                                                      //                   '${Provider.of<SplashProvider>(context, listen: false).baseUrls.productImageUrl}/${details.productDetailsModel.images[index]}',
+                                                      //               imageErrorBuilder:
+                                                      //                   (c, o, s) =>
+                                                      //                       Image.asset(
+                                                      //                 Images.placeholder,
+                                                      //                 height:
+                                                      //                     MediaQuery.of(
+                                                      //                             context)
+                                                      //                         .size
+                                                      //                         .width,
+                                                      //                 width:
+                                                      //                     MediaQuery.of(
+                                                      //                             context)
+                                                      //                         .size
+                                                      //                         .width,
+                                                      //                 fit: BoxFit.cover,
+                                                      //               ),
+                                                      //             ),
+                                                      //           );
+                                                      //         },
+                                                      //         onPageChanged: (index) {
+                                                      //           Provider.of<ProductDetailsProvider>(
+                                                      //                   context,
+                                                      //                   listen: false)
+                                                      //               .setImageSliderSelectedIndex(
+                                                      //                   index);
+                                                      //         },
+                                                      //       )
+                                                      : SizedBox(),
                                                 ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    if (Provider.of<ProductDetailsProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .sharableLink !=
-                                                        null) {
-                                                      Share.share(Provider.of<
-                                                                  ProductDetailsProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .sharableLink);
-                                                    }
-                                                  },
-                                                  child: Card(
-                                                    elevation: 2,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50)),
-                                                    child: Container(
-                                                      width: 30,
-                                                      height: 30,
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: Icon(Icons.share,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .cardColor,
-                                                          size: Dimensions
-                                                              .ICON_SIZE_SMALL),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          details.productDetailsModel
-                                                          .unitPrice !=
-                                                      null &&
-                                                  details.productDetailsModel
-                                                          .discount !=
-                                                      0
-                                              ? Positioned(
-                                                  left: 0,
-                                                  top: 0,
+                                                // Positioned(
+                                                //   left: 0,
+                                                //   right: 0,
+                                                //   bottom: 30,
+                                                //   child: Row(
+                                                //     mainAxisAlignment:
+                                                //         MainAxisAlignment.center,
+                                                //     children: [
+                                                //       SizedBox(),
+                                                //       Spacer(),
+                                                //       Row(
+                                                //         mainAxisAlignment:
+                                                //             MainAxisAlignment.center,
+                                                //         children: _indicators(
+                                                //             context,
+                                                //             details
+                                                //                 .productDetailsModel
+                                                //                 .images),
+                                                //       ),
+                                                //       Spacer(),
+                                                //       Provider.of<ProductDetailsProvider>(
+                                                //                       context)
+                                                //                   .imageSliderIndex !=
+                                                //               null
+                                                //           ? Padding(
+                                                //               padding: const EdgeInsets
+                                                //                       .only(
+                                                //                   right: Dimensions
+                                                //                       .PADDING_SIZE_DEFAULT,
+                                                //                   bottom: Dimensions
+                                                //                       .PADDING_SIZE_DEFAULT),
+                                                //               child: Text(
+                                                //                   '${Provider.of<ProductDetailsProvider>(context).imageSliderIndex + 1}' +
+                                                //                       '/' +
+                                                //                       '${details.productDetailsModel.images.length.toString()}'),
+                                                //             )
+                                                //           : SizedBox(),
+                                                //     ],
+                                                //   ),
+                                                // ),
+                                                Positioned(
+                                                  top: 16,
+                                                  right: 16,
                                                   child: Column(
                                                     children: [
-                                                      Container(
-                                                        padding: EdgeInsets.all(
-                                                            Dimensions
-                                                                .PADDING_SIZE_EXTRA_SMALL),
-                                                        alignment:
-                                                            Alignment.center,
-                                                        decoration: BoxDecoration(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                            borderRadius: BorderRadius.only(
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        Dimensions
-                                                                            .PADDING_SIZE_SMALL))),
-                                                        child: Text(
-                                                          '${PriceConverter.percentageCalculation(context, details.productDetailsModel.unitPrice, details.productDetailsModel.discount, details.productDetailsModel.discountType)}',
-                                                          style: titilliumRegular.copyWith(
+                                                      FavouriteButton(
+                                                        backgroundColor:
+                                                            ColorResources
+                                                                .getImageBg(
+                                                                    context),
+                                                        favColor:
+                                                            Colors.redAccent,
+                                                        isSelected: Provider.of<
+                                                                    WishListProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .isWish,
+                                                        productId: details
+                                                            .productDetailsModel
+                                                            .id,
+                                                      ),
+                                                      SizedBox(
+                                                        height: Dimensions
+                                                            .PADDING_SIZE_SMALL,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          if (Provider.of<ProductDetailsProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .sharableLink !=
+                                                              null) {
+                                                            Share.share(Provider.of<
+                                                                        ProductDetailsProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .sharableLink);
+                                                          }
+                                                        },
+                                                        child: Card(
+                                                          elevation: 2,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50)),
+                                                          child: Container(
+                                                            width: 30,
+                                                            height: 30,
+                                                            decoration:
+                                                                BoxDecoration(
                                                               color: Theme.of(
                                                                       context)
-                                                                  .cardColor,
-                                                              fontSize: Dimensions
-                                                                  .FONT_SIZE_LARGE),
+                                                                  .primaryColor,
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                            ),
+                                                            child: Icon(
+                                                                Icons.share,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .cardColor,
+                                                                size: Dimensions
+                                                                    .ICON_SIZE_SMALL),
+                                                          ),
                                                         ),
-                                                      ),
+                                                      )
                                                     ],
                                                   ),
-                                                )
-                                              : SizedBox.shrink(),
-                                          SizedBox.shrink(),
-                                        ]),
-                                      )
-                                    : SizedBox(),
-                              ),
-                            ],
-                          ),
-
+                                                ),
+                                                details.productDetailsModel
+                                                                .unitPrice !=
+                                                            null &&
+                                                        details.productDetailsModel
+                                                                .discount !=
+                                                            0
+                                                    ? Positioned(
+                                                        left: 0,
+                                                        top: 0,
+                                                        child: Column(
+                                                          children: [
+                                                            Container(
+                                                              padding: EdgeInsets
+                                                                  .all(Dimensions
+                                                                      .PADDING_SIZE_EXTRA_SMALL),
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              decoration: BoxDecoration(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
+                                                                  borderRadius:
+                                                                      BorderRadius.only(
+                                                                          bottomRight:
+                                                                              Radius.circular(Dimensions.PADDING_SIZE_SMALL))),
+                                                              child: Text(
+                                                                '${PriceConverter.percentageCalculation(context, details.productDetailsModel.unitPrice, details.productDetailsModel.discount, details.productDetailsModel.discountType)}',
+                                                                style: titilliumRegular.copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .cardColor,
+                                                                    fontSize:
+                                                                        Dimensions
+                                                                            .FONT_SIZE_LARGE),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : SizedBox.shrink(),
+                                                SizedBox.shrink(),
+                                              ]),
+                                            )
+                                          : SizedBox(),
+                                    ),
+                                  ],
+                                ),
                           Container(
                             transform:
                                 Matrix4.translationValues(0.0, -25.0, 0.0),

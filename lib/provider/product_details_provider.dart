@@ -19,7 +19,7 @@ class ProductDetailsProvider extends ChangeNotifier {
   int _imageSliderIndex;
   bool _wish = false;
   int _quantity = 0;
-  int _variantIndex;
+  int _variantIndex=0;
   List<int> _variationIndex;
   int _rating = 0;
   bool _isLoading = false;

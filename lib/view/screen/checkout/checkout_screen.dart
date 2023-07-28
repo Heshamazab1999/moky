@@ -580,7 +580,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                   Text(getTranslated('payment_method', context), style: titilliumSemiBold.copyWith(fontSize: Dimensions.FONT_SIZE_LARGE),),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  SizedBox(height: 100,
+                  SizedBox(height: 80,
                       child: ListView.builder(
                         itemCount: _paymentMethods.length,
                         shrinkWrap: true,

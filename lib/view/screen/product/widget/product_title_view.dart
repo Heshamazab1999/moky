@@ -106,98 +106,246 @@ class ProductTitleView extends StatelessWidget {
                       SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                       productModel.colors != null &&
                               productModel.colors.length > 0
-                          ? Row(children: [
-                              Text(
-                                  '${getTranslated('select_variant', context)} : ',
-                                  style: titilliumRegular.copyWith(
-                                      fontSize: Dimensions.FONT_SIZE_LARGE)),
-                        Expanded(
-                          child: SizedBox(
-                            height: 40,
-                            child: ListView.builder(
-                              itemCount: productModel.colors.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (ctx, index) {
-                                String colorString = '0xff' + productModel.colors[index].code.substring(1, 7);
-                                return InkWell(
-                                  onTap: () {
-                                    Provider.of<ProductDetailsProvider>(context, listen: false).setCartVariantIndex(productModel.minimumOrderQty, index, context);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                        border: details.variantIndex == index ? Border.all(width: 1,
-                                            color: Theme.of(context).primaryColor):null
-                                    ),
-                                    child: Padding(padding: const EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-
-                                      child: Container(height: Dimensions.topSpace, width: Dimensions.topSpace,
-                                        padding: EdgeInsets.all( Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: Color(int.parse(colorString)),
-                                          borderRadius: BorderRadius.circular(5),),
+                          ? productModel.imageColors.isEmpty
+                              ? Row(children: [
+                                  Text(
+                                      '${getTranslated('select_variant', context)} : ',
+                                      style: titilliumRegular.copyWith(
+                                          fontSize:
+                                              Dimensions.FONT_SIZE_LARGE)),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: ListView.builder(
+                                        itemCount: productModel.colors.length,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (ctx, index) {
+                                          String colorString = '0xff' +
+                                              productModel.colors[index].code
+                                                  .substring(1, 7);
+                                          return InkWell(
+                                            onTap: () {
+                                              Provider.of<ProductDetailsProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .setCartVariantIndex(
+                                                      productModel
+                                                          .minimumOrderQty,
+                                                      index,
+                                                      context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius
+                                                      .circular(Dimensions
+                                                          .PADDING_SIZE_EXTRA_SMALL),
+                                                  border: details
+                                                              .variantIndex ==
+                                                          index
+                                                      ? Border.all(
+                                                          width: 1,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor)
+                                                      : null),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                    Dimensions
+                                                        .PADDING_SIZE_EXTRA_SMALL),
+                                                child: Container(
+                                                  height: Dimensions.topSpace,
+                                                  width: Dimensions.topSpace,
+                                                  padding: EdgeInsets.all(Dimensions
+                                                      .PADDING_SIZE_EXTRA_SMALL),
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(
+                                                        int.parse(colorString)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                              // Expanded(
-                              //   child: SizedBox(
-                              //     height: 40,
-                              //     child: ListView.builder(
-                              //       itemCount: productModel.colors.length,
-                              //       shrinkWrap: true,
-                              //       scrollDirection: Axis.horizontal,
-                              //       itemBuilder: (context, index) {
-                              //         String colorString = '0xff' +
-                              //             productModel.colors[index].code
-                              //                 .substring(1, 7);
-                              //         return InkWell(
-                              //           onTap: () {
-                              //             Provider.of<ProductDetailsProvider>(
-                              //                     context,
-                              //                     listen: false)
-                              //                 .setCartVariantIndex(
-                              //                     productModel.minimumOrderQty,
-                              //                     index,
-                              //                     context);
-                              //           },
-                              //           child: Container(
-                              //             decoration: BoxDecoration(
-                              //               borderRadius: BorderRadius.circular(
-                              //                   Dimensions
-                              //                       .PADDING_SIZE_EXTRA_SMALL),
-                              //             ),
-                              //             child: Padding(
-                              //               padding: const EdgeInsets.all(
-                              //                   Dimensions
-                              //                       .PADDING_SIZE_EXTRA_SMALL),
-                              //               child: Container(
-                              //                 height: 30,
-                              //                 width: 30,
-                              //                 padding: EdgeInsets.all(Dimensions
-                              //                     .PADDING_SIZE_EXTRA_SMALL),
-                              //                 alignment: Alignment.center,
-                              //                 decoration: BoxDecoration(
-                              //                   color: Color(
-                              //                       int.parse(colorString)),
-                              //                   borderRadius:
-                              //                       BorderRadius.circular(5),
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //           ),
-                              //         );
-                              //       },
-                              //     ),
-                              //   ),
-                              // ),
-                            ])
+                                  // Expanded(
+                                  //   child: SizedBox(
+                                  //     height: 40,
+                                  //     child: ListView.builder(
+                                  //       itemCount: productModel.colors.length,
+                                  //       shrinkWrap: true,
+                                  //       scrollDirection: Axis.horizontal,
+                                  //       itemBuilder: (context, index) {
+                                  //         String colorString = '0xff' +
+                                  //             productModel.colors[index].code
+                                  //                 .substring(1, 7);
+                                  //         return InkWell(
+                                  //           onTap: () {
+                                  //             Provider.of<ProductDetailsProvider>(
+                                  //                     context,
+                                  //                     listen: false)
+                                  //                 .setCartVariantIndex(
+                                  //                     productModel.minimumOrderQty,
+                                  //                     index,
+                                  //                     context);
+                                  //           },
+                                  //           child: Container(
+                                  //             decoration: BoxDecoration(
+                                  //               borderRadius: BorderRadius.circular(
+                                  //                   Dimensions
+                                  //                       .PADDING_SIZE_EXTRA_SMALL),
+                                  //             ),
+                                  //             child: Padding(
+                                  //               padding: const EdgeInsets.all(
+                                  //                   Dimensions
+                                  //                       .PADDING_SIZE_EXTRA_SMALL),
+                                  //               child: Container(
+                                  //                 height: 30,
+                                  //                 width: 30,
+                                  //                 padding: EdgeInsets.all(Dimensions
+                                  //                     .PADDING_SIZE_EXTRA_SMALL),
+                                  //                 alignment: Alignment.center,
+                                  //                 decoration: BoxDecoration(
+                                  //                   color: Color(
+                                  //                       int.parse(colorString)),
+                                  //                   borderRadius:
+                                  //                       BorderRadius.circular(5),
+                                  //                 ),
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //         );
+                                  //       },
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ])
+                              : Row(children: [
+                                  Text(
+                                      '${getTranslated('select_variant', context)} : ',
+                                      style: titilliumRegular.copyWith(
+                                          fontSize:
+                                              Dimensions.FONT_SIZE_LARGE)),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: ListView.builder(
+                                        itemCount:
+                                            productModel.imageColors.length,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (ctx, index) {
+                                          String colorString = '0xff' +
+                                              productModel
+                                                  .imageColors[index].color;
+                                          return InkWell(
+                                            onTap: () {
+                                              Provider.of<ProductDetailsProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .setCartVariantIndex(
+                                                      productModel
+                                                          .minimumOrderQty,
+                                                      index,
+                                                      context);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius
+                                                      .circular(Dimensions
+                                                          .PADDING_SIZE_EXTRA_SMALL),
+                                                  border: details
+                                                              .variantIndex ==
+                                                          index
+                                                      ? Border.all(
+                                                          width: 1,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor)
+                                                      : null),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                    Dimensions
+                                                        .PADDING_SIZE_EXTRA_SMALL),
+                                                child: Container(
+                                                  height: Dimensions.topSpace,
+                                                  width: Dimensions.topSpace,
+                                                  padding: EdgeInsets.all(Dimensions
+                                                      .PADDING_SIZE_EXTRA_SMALL),
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(
+                                                        int.parse(colorString)),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  // Expanded(
+                                  //   child: SizedBox(
+                                  //     height: 40,
+                                  //     child: ListView.builder(
+                                  //       itemCount: productModel.colors.length,
+                                  //       shrinkWrap: true,
+                                  //       scrollDirection: Axis.horizontal,
+                                  //       itemBuilder: (context, index) {
+                                  //         String colorString = '0xff' +
+                                  //             productModel.colors[index].code
+                                  //                 .substring(1, 7);
+                                  //         return InkWell(
+                                  //           onTap: () {
+                                  //             Provider.of<ProductDetailsProvider>(
+                                  //                     context,
+                                  //                     listen: false)
+                                  //                 .setCartVariantIndex(
+                                  //                     productModel.minimumOrderQty,
+                                  //                     index,
+                                  //                     context);
+                                  //           },
+                                  //           child: Container(
+                                  //             decoration: BoxDecoration(
+                                  //               borderRadius: BorderRadius.circular(
+                                  //                   Dimensions
+                                  //                       .PADDING_SIZE_EXTRA_SMALL),
+                                  //             ),
+                                  //             child: Padding(
+                                  //               padding: const EdgeInsets.all(
+                                  //                   Dimensions
+                                  //                       .PADDING_SIZE_EXTRA_SMALL),
+                                  //               child: Container(
+                                  //                 height: 30,
+                                  //                 width: 30,
+                                  //                 padding: EdgeInsets.all(Dimensions
+                                  //                     .PADDING_SIZE_EXTRA_SMALL),
+                                  //                 alignment: Alignment.center,
+                                  //                 decoration: BoxDecoration(
+                                  //                   color: Color(
+                                  //                       int.parse(colorString)),
+                                  //                   borderRadius:
+                                  //                       BorderRadius.circular(5),
+                                  //                 ),
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //         );
+                                  //       },
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ])
                           : SizedBox(),
                       productModel.colors != null &&
                               productModel.colors.length > 0
@@ -231,7 +379,7 @@ class ProductTitleView extends StatelessWidget {
                                           child: GridView.builder(
                                             gridDelegate:
                                                 SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 6,
+                                              crossAxisCount: 4,
                                               crossAxisSpacing: 5,
                                               mainAxisSpacing: 5,
                                               childAspectRatio: (1 / .7),
