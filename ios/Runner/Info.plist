@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>6Valley</string>
+	<string>MokyMah</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -38,7 +38,7 @@
 	<key>FacebookClientToken</key>
 	<string>cb35f1ec4b6240aad802c5c2b1cdc910</string>
 	<key>FacebookDisplayName</key>
-	<string>6valley</string>
+	<string>Moky Mah</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
@@ -49,6 +49,8 @@
 	<string>This app needs access to location to manage delivery address when add a new address.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app need photo gallery access for taking photo for user profile picture.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -75,7 +77,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>
