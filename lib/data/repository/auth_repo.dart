@@ -125,7 +125,7 @@ class AuthRepo {
   }
 
   Future<bool> clearSharedData() async {
-    //sharedPreferences.remove(AppConstants.CART_LIST);
+    sharedPreferences.remove(AppConstants.CART_LIST);
     sharedPreferences.remove(AppConstants.CURRENCY);
     sharedPreferences.remove(AppConstants.TOKEN);
     sharedPreferences.remove(AppConstants.USER);
