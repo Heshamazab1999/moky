@@ -54,7 +54,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: true , ignoreSsl: true);
   await di.init();
-  final NotificationAppLaunchDetails notificationAppLaunchDetails =
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
   await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   int _orderID;
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {

@@ -1,5 +1,3 @@
-import 'package:flutter_sixvalley_ecommerce/data/model/response/cart_model.dart';
-import 'package:flutter_sixvalley_ecommerce/data/model/response/product_model.dart';
 
 class OrderPlaceModel {
 

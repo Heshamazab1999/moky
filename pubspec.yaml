@@ -3,10 +3,10 @@ description: A new Flutter setup application for starting a project.
 
 publish_to: 'none'
 
-version: 1.0.0+2
+version: 1.0.0+4
 
 environment:
-  sdk: ">=2.7.2 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:

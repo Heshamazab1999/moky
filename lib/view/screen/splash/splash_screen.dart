@@ -5,7 +5,6 @@ import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dar
 import 'package:flutter_sixvalley_ecommerce/provider/auth_provider.dart';
 import 'package:flutter_sixvalley_ecommerce/provider/profile_provider.dart';
 import 'package:flutter_sixvalley_ecommerce/provider/splash_provider.dart';
-import 'package:flutter_sixvalley_ecommerce/provider/theme_provider.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/color_resources.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/view/basewidget/no_internet_screen.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_sixvalley_ecommerce/view/screen/auth/auth_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/view/screen/dashboard/dashboard_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/view/screen/maintenance/maintenance_screen.dart';
 import 'package:flutter_sixvalley_ecommerce/view/screen/onboarding/onboarding_screen.dart';
-import 'package:flutter_sixvalley_ecommerce/view/screen/splash/widget/splash_painter.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
