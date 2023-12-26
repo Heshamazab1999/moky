@@ -17,6 +17,10 @@ class MyNotification {
     var initializationsSettings = new InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
     flutterLocalNotificationsPlugin.initialize(initializationsSettings, onSelectNotification: (String payload) async {
       try{
+
+
+        await requestIOSPermissions();
+
         if(payload != null && payload.isNotEmpty) {
           MyApp.navigatorKey.currentState.push(
               MaterialPageRoute(builder: (context) => OrderDetailsScreen(orderId: int.parse(payload),orderType: 'default_type')));
@@ -38,6 +42,18 @@ class MyNotification {
         }
       }catch (e) {}
     });
+  }
+
+
+  static Future<void> requestIOSPermissions() async {
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   static Future<void> showNotification(RemoteMessage message, FlutterLocalNotificationsPlugin fln, bool data) async {
